@@ -20,6 +20,8 @@ class Shop extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->load->view('shop_welcome');
+        $this->load->view('shop_welcome');
+        $this->load->model('products_model');
+        $this->load->view('products');
 	}
 }
