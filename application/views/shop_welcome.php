@@ -13,7 +13,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <title>Shop</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="../../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="<?php echo base_url('assets/bootstrap/css/bootstrap.min.css');?>" type="text/css">
+
+    <!--<link href="../../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">-->
 	
 
     <!-- Custom styles for this template -->
@@ -23,6 +25,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
   <body>
 
+
+  
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
       <a class="navbar-brand" href="#"></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +41,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           <li class="nav-item">
             <a class="nav-link" href="about">Acerca</a>
           </li>
-		  <li class="nav-item">
+          <li class="nav-item">
+          <a class="nav-link" href="<?php echo base_url();?>index.php/CrudController/create">Crear nueva categoria</a> 
+          </li>
+		      <li class="nav-item">
             <a class="nav-link" href="contact">Contacto</a>
           </li>
          </ul>
@@ -90,6 +97,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="../../assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?php echo base_url('assets/bootstrap/js/bootstrap.min.js');?>"></script>
   </body>
 </html>

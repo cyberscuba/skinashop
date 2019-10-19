@@ -13,7 +13,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <title>Shop</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="../../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="<?php echo base_url('assets/bootstrap/css/bootstrap.min.css');?>" type="text/css">
+
 	
 
     <!-- Custom styles for this template -->
@@ -44,16 +45,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </button>
                 </div>
                 <div class="modal-body">
-                <form method="POST" action="<?php echo site_url("CrudController/create");?>">
+               
+                <form method="post" action="<?php echo site_url('CrudController/create');?>">
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Nombre categoria</label>
-                        <input type="text" class="form-control" name="nombre_producto" id="nombre_producto" aria-describedby="emailHelp" placeholder="Nombre categoria">
+                        <label for="nombre_categoria">Nombre categoria</label>
+                        <input type="text" class="form-control" name="nombre_categoria" id="nombre_categoria" aria-describedby="emailHelp" placeholder="Nombre categoria">
                         <small id="e_producto" class="form-text text-muted">We'll never share your email with anyone else.</small>
                     </div>
 
                     <div class="form-group form-check">
                         <input type="checkbox" class="form-check-input" name="es_activa" id="es_activa">
-                        <label class="form-check-label" for="exampleCheck1">Activo</label>
+                        <label class="form-check-label" for="es_activa">Activo</label>
                     </div>
                     <button type="submit" class="btn btn-primary">Guardar</button>
                     </form>
@@ -78,12 +80,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </tr>
         </thead>
         <tbody>
+            <?php foreach($result as $row) {?>
             <tr>
-            <th scope="row"></th>
-            <td></td>
-            <td></td>
-            <td></td>
-            </tr>
+            <th scope="row"><?php echo $row->id_categoria;?></th>
+            <td><?php echo $row->nombre_categoria;?></td>
+            <td><?php echo $row->es_activa;?></td>
+            <td> 
+            <a href="<?php echo site_url('CrudController/edit');?>/<?php echo $row->id_categoria;?>">Edit</a>  | 
+            <a href="<?php echo site_url('CrudController/delete');?>/<?php echo $row->id_categoria;?>">Delete</a> </td>
+                </tr>
+                <?php } ?>
         </tbody>
         </table>
       </div>
@@ -95,6 +101,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="../../assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?php echo base_url('assets/bootstrap/js/bootstrap.min.js');?>"></script>
   </body>
   </html>
