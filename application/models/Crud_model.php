@@ -10,7 +10,12 @@ class Crud_model extends CI_Model {
 /* Metodos para las categorias.*/
     function categories_show()
     {
-        $query = $this->db->query('SELECT id_categoria, nombre_categoria, es_activa FROM categorias');
+        $query = $this->db->query('SELECT id_categoria, nombre_categoria, 
+        CASE
+        WHEN es_activa = 0 THEN "INACTIVA"
+        WHEN es_activa = 1 THEN "ACTIVA"
+        ELSE "NO TIENE ESTADO"
+        END AS es_activa FROM categorias');
         return $query->result();
     }
     function categorias_unico_registro($id_categoria) {
@@ -25,7 +30,7 @@ class Crud_model extends CI_Model {
         );
         $this->db->insert('categorias',$data);
     }
-    function categories_edit($id_categoria)
+    function categories_update($id_categoria)
     {
         $data = array (
             'nombre_categoria' => $this->input->post('nombre_categoria'),
@@ -57,7 +62,7 @@ class Crud_model extends CI_Model {
         );
         $this->db->insert('subcategoria',$data);
     }
-    function sub_categories_edit($id_subcategoria)
+    function sub_categories_update($id_subcategoria)
     {
         $data = array (
             'nombre_subcategoria' => $this->input->post('nombre_subcategoria'),
@@ -90,7 +95,7 @@ class Crud_model extends CI_Model {
         );
         $this->db->insert('productos',$data);
     }
-    function products_edit($id_producto)
+    function products_update($id_producto)
     {
         $data = array (
             'nombre_producto' => $this->input->post('nombre_producto'),
@@ -126,7 +131,7 @@ class Crud_model extends CI_Model {
         );
         $this->db->insert('categoria_subcategoria',$data);
     }
-    function category_sub_category_edit($id_cat_sub)
+    function category_sub_category_update($id_cat_sub)
     {
         $data = array (
             'id_categoria' => $this->input->post('id_categoria'),
@@ -161,7 +166,7 @@ class Crud_model extends CI_Model {
         );
         $this->db->insert('product_cat', $data);
     }
-    function products_category_edit($id_prodcat)
+    function products_category_update($id_prodcat)
     {
         $data = array (
             'id_catsub' => $this->input->post('id_catsub'),
@@ -194,7 +199,7 @@ class Crud_model extends CI_Model {
         );
         $this->db->insert('totales_actuales', $data);
     }
-    function total_products_edit($id_totales)
+    function total_products_update($id_totales)
     {
         $data = array (
             'id_producto' => $this->input->post('id_producto'),

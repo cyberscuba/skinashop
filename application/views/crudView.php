@@ -29,6 +29,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       <div class="container">
         <br>
         <br>
+
+        
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
   Adicionar
