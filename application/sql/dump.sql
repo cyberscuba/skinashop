@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:8889
--- Tiempo de generación: 20-10-2019 a las 20:49:40
+-- Tiempo de generación: 20-10-2019 a las 23:55:51
 -- Versión del servidor: 5.7.26
 -- Versión de PHP: 7.2.20
 
@@ -19,61 +19,10 @@ USE `shop`;
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `acl`
---
-
-CREATE TABLE `acl` (
-  `ai` int(10) UNSIGNED NOT NULL,
-  `action_id` int(10) UNSIGNED NOT NULL,
-  `user_id` int(10) UNSIGNED DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `acl_actions`
---
-
-CREATE TABLE `acl_actions` (
-  `action_id` int(10) UNSIGNED NOT NULL,
-  `action_code` varchar(100) NOT NULL COMMENT 'No periods allowed!',
-  `action_desc` varchar(100) NOT NULL COMMENT 'Human readable description',
-  `category_id` int(10) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `acl_categories`
---
-
-CREATE TABLE `acl_categories` (
-  `category_id` int(10) UNSIGNED NOT NULL,
-  `category_code` varchar(100) NOT NULL COMMENT 'No periods allowed!',
-  `category_desc` varchar(100) NOT NULL COMMENT 'Human readable description'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `auth_sessions`
---
-
-CREATE TABLE `auth_sessions` (
-  `id` varchar(128) NOT NULL,
-  `user_id` int(10) UNSIGNED NOT NULL,
-  `login_time` datetime DEFAULT NULL,
-  `modified_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `ip_address` varchar(45) NOT NULL,
-  `user_agent` varchar(60) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `categorias`
 --
 
+DROP TABLE IF EXISTS `categorias`;
 CREATE TABLE `categorias` (
   `id_categoria` int(11) NOT NULL,
   `nombre_categoria` varchar(100) DEFAULT NULL,
@@ -85,13 +34,10 @@ CREATE TABLE `categorias` (
 --
 
 INSERT INTO `categorias` VALUES
-(1, NULL, NULL),
-(3, '11111', 1),
 (4, 'ssdfsdf', 1),
 (5, 'SELECCION 512', 1),
 (6, 'sfsdfsfd', NULL),
-(7, 'CAMBIADO 2', 1),
-(9, NULL, NULL);
+(7, 'CAMBIADO 2', 1);
 
 -- --------------------------------------------------------
 
@@ -99,6 +45,7 @@ INSERT INTO `categorias` VALUES
 -- Estructura de tabla para la tabla `categoria_subcategoria`
 --
 
+DROP TABLE IF EXISTS `categoria_subcategoria`;
 CREATE TABLE `categoria_subcategoria` (
   `id_catsub` int(11) NOT NULL,
   `id_categoria` int(11) DEFAULT NULL,
@@ -124,53 +71,37 @@ INSERT INTO `categoria_subcategoria` VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ci_sessions`
+-- Estructura de tabla para la tabla `groups`
 --
 
-CREATE TABLE `ci_sessions` (
-  `id` varchar(128) NOT NULL,
-  `ip_address` varchar(45) NOT NULL,
-  `timestamp` int(10) UNSIGNED NOT NULL DEFAULT '0',
-  `data` blob NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `groups`;
+CREATE TABLE `groups` (
+  `id` mediumint(8) UNSIGNED NOT NULL,
+  `name` varchar(20) NOT NULL,
+  `description` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `groups`
+--
+
+INSERT INTO `groups` VALUES
+(1, 'admin', 'Administrator'),
+(2, 'members', 'General User');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `denied_access`
+-- Estructura de tabla para la tabla `login_attempts`
 --
 
-CREATE TABLE `denied_access` (
-  `ai` int(10) UNSIGNED NOT NULL,
+DROP TABLE IF EXISTS `login_attempts`;
+CREATE TABLE `login_attempts` (
+  `id` int(11) UNSIGNED NOT NULL,
   `ip_address` varchar(45) NOT NULL,
-  `time` datetime NOT NULL,
-  `reason_code` tinyint(1) UNSIGNED DEFAULT '0'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `ips_on_hold`
---
-
-CREATE TABLE `ips_on_hold` (
-  `ai` int(10) UNSIGNED NOT NULL,
-  `ip_address` varchar(45) NOT NULL,
-  `time` datetime NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `login_errors`
---
-
-CREATE TABLE `login_errors` (
-  `ai` int(10) UNSIGNED NOT NULL,
-  `username_or_email` varchar(255) NOT NULL,
-  `ip_address` varchar(45) NOT NULL,
-  `time` datetime NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `login` varchar(100) NOT NULL,
+  `time` int(11) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -178,6 +109,7 @@ CREATE TABLE `login_errors` (
 -- Estructura de tabla para la tabla `productos`
 --
 
+DROP TABLE IF EXISTS `productos`;
 CREATE TABLE `productos` (
   `id_producto` int(11) NOT NULL,
   `nombre_producto` varchar(100) DEFAULT NULL,
@@ -201,6 +133,7 @@ INSERT INTO `productos` VALUES
 -- Estructura de tabla para la tabla `product_cat`
 --
 
+DROP TABLE IF EXISTS `product_cat`;
 CREATE TABLE `product_cat` (
   `id_prodcat` int(11) NOT NULL,
   `id_categoria` int(11) NOT NULL,
@@ -218,106 +151,8 @@ INSERT INTO `product_cat` VALUES
 (3, 3, 4, 1, 0),
 (5, 7, 3, 1, 0),
 (6, 5, 4, 1, 0),
-(7, 5, 3, 1, 5);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `shop.auth_sessions`
---
-
-CREATE TABLE `shop.auth_sessions` (
-  `id` varchar(128) NOT NULL,
-  `user_id` int(10) UNSIGNED NOT NULL,
-  `login_time` datetime DEFAULT NULL,
-  `modified_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `ip_address` varchar(45) NOT NULL,
-  `user_agent` varchar(60) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `shop.ci_sessions`
---
-
-CREATE TABLE `shop.ci_sessions` (
-  `id` varchar(128) NOT NULL,
-  `ip_address` varchar(45) NOT NULL,
-  `timestamp` int(10) UNSIGNED NOT NULL DEFAULT '0',
-  `data` blob NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `shop.denied_access`
---
-
-CREATE TABLE `shop.denied_access` (
-  `ai` int(10) UNSIGNED NOT NULL,
-  `ip_address` varchar(45) NOT NULL,
-  `time` datetime NOT NULL,
-  `reason_code` tinyint(1) UNSIGNED DEFAULT '0'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `shop.ips_on_hold`
---
-
-CREATE TABLE `shop.ips_on_hold` (
-  `ai` int(10) UNSIGNED NOT NULL,
-  `ip_address` varchar(45) NOT NULL,
-  `time` datetime NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `shop.login_errors`
---
-
-CREATE TABLE `shop.login_errors` (
-  `ai` int(10) UNSIGNED NOT NULL,
-  `username_or_email` varchar(255) NOT NULL,
-  `ip_address` varchar(45) NOT NULL,
-  `time` datetime NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `shop.username_or_email_on_hold`
---
-
-CREATE TABLE `shop.username_or_email_on_hold` (
-  `ai` int(10) UNSIGNED NOT NULL,
-  `username_or_email` varchar(255) NOT NULL,
-  `time` datetime NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `shop.users`
---
-
-CREATE TABLE `shop.users` (
-  `user_id` int(10) UNSIGNED NOT NULL,
-  `username` varchar(12) DEFAULT NULL,
-  `email` varchar(255) NOT NULL,
-  `auth_level` tinyint(3) UNSIGNED NOT NULL,
-  `banned` enum('0','1') NOT NULL DEFAULT '0',
-  `passwd` varchar(60) NOT NULL,
-  `passwd_recovery_code` varchar(60) DEFAULT NULL,
-  `passwd_recovery_date` datetime DEFAULT NULL,
-  `passwd_modified_at` datetime DEFAULT NULL,
-  `last_login` datetime DEFAULT NULL,
-  `created_at` datetime NOT NULL,
-  `modified_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+(7, 5, 3, 1, 5),
+(8, 5, 4, 1, 5);
 
 -- --------------------------------------------------------
 
@@ -325,6 +160,7 @@ CREATE TABLE `shop.users` (
 -- Estructura de tabla para la tabla `subcategoria`
 --
 
+DROP TABLE IF EXISTS `subcategoria`;
 CREATE TABLE `subcategoria` (
   `id_subcategoria` int(11) NOT NULL,
   `nombre_subcategoria` varchar(100) DEFAULT NULL,
@@ -348,6 +184,7 @@ INSERT INTO `subcategoria` VALUES
 -- Estructura de tabla para la tabla `totales_actuales`
 --
 
+DROP TABLE IF EXISTS `totales_actuales`;
 CREATE TABLE `totales_actuales` (
   `id_producto` int(11) DEFAULT NULL,
   `cantidad_producto` int(11) DEFAULT NULL,
@@ -365,34 +202,30 @@ INSERT INTO `totales_actuales` VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `username_or_email_on_hold`
---
-
-CREATE TABLE `username_or_email_on_hold` (
-  `ai` int(10) UNSIGNED NOT NULL,
-  `username_or_email` varchar(255) NOT NULL,
-  `time` datetime NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `users`
 --
 
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
-  `user_id` int(10) UNSIGNED NOT NULL,
-  `username` varchar(12) DEFAULT NULL,
-  `email` varchar(255) NOT NULL,
-  `auth_level` tinyint(3) UNSIGNED NOT NULL,
-  `banned` enum('0','1') NOT NULL DEFAULT '0',
-  `passwd` varchar(60) NOT NULL,
-  `passwd_recovery_code` varchar(60) DEFAULT NULL,
-  `passwd_recovery_date` datetime DEFAULT NULL,
-  `passwd_modified_at` datetime DEFAULT NULL,
-  `last_login` datetime DEFAULT NULL,
-  `created_at` datetime NOT NULL,
-  `modified_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `id` int(11) UNSIGNED NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `username` varchar(100) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `email` varchar(254) NOT NULL,
+  `activation_selector` varchar(255) DEFAULT NULL,
+  `activation_code` varchar(255) DEFAULT NULL,
+  `forgotten_password_selector` varchar(255) DEFAULT NULL,
+  `forgotten_password_code` varchar(255) DEFAULT NULL,
+  `forgotten_password_time` int(11) UNSIGNED DEFAULT NULL,
+  `remember_selector` varchar(255) DEFAULT NULL,
+  `remember_code` varchar(255) DEFAULT NULL,
+  `created_on` int(11) UNSIGNED NOT NULL,
+  `last_login` int(11) UNSIGNED DEFAULT NULL,
+  `active` tinyint(1) UNSIGNED DEFAULT NULL,
+  `first_name` varchar(50) DEFAULT NULL,
+  `last_name` varchar(50) DEFAULT NULL,
+  `company` varchar(100) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -400,53 +233,32 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` VALUES
-(919936666, 'carlos', 'charlysumo@gmail.com', 1, '0', '$2y$11$Qima3q/5dVET5AxeCvUTUevoM9xsvM9VtC8eWNdlWu98WdcZLX1KW', NULL, NULL, NULL, NULL, '2019-10-20 20:28:04', '2019-10-20 20:28:04'),
-(3957971252, 'skunkbot', 'skunkbot@example.com', 1, '0', '$2y$11$E1EaPqeEI8qiFl6YlPwG5uldkMEaXiIJQCmEgJjPFswGtoa0pzpsa', NULL, NULL, NULL, NULL, '2019-10-20 20:19:04', '2019-10-20 20:19:04');
+(1, '127.0.0.1', 'administrator', '$2y$08$200Z6ZZbp3RAEXoaWcMA6uJOFicwNZaqk4oDhqTUiFXFe63MG.Daa', 'admin@admin.com', NULL, '', NULL, NULL, NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0');
+
+-- --------------------------------------------------------
 
 --
--- Disparadores `users`
+-- Estructura de tabla para la tabla `users_groups`
 --
-DELIMITER $$
-CREATE TRIGGER `ca_passwd_trigger` BEFORE UPDATE ON `users` FOR EACH ROW BEGIN
-    IF ((NEW.passwd <=> OLD.passwd) = 0) THEN
-        SET NEW.passwd_modified_at = NOW();
-    END IF;
-END
-$$
-DELIMITER ;
+
+DROP TABLE IF EXISTS `users_groups`;
+CREATE TABLE `users_groups` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL,
+  `group_id` mediumint(8) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `users_groups`
+--
+
+INSERT INTO `users_groups` VALUES
+(1, 1, 1),
+(2, 1, 2);
 
 --
 -- Índices para tablas volcadas
 --
-
---
--- Indices de la tabla `acl`
---
-ALTER TABLE `acl`
-  ADD PRIMARY KEY (`ai`),
-  ADD KEY `action_id` (`action_id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Indices de la tabla `acl_actions`
---
-ALTER TABLE `acl_actions`
-  ADD PRIMARY KEY (`action_id`),
-  ADD KEY `category_id` (`category_id`);
-
---
--- Indices de la tabla `acl_categories`
---
-ALTER TABLE `acl_categories`
-  ADD PRIMARY KEY (`category_id`),
-  ADD UNIQUE KEY `category_code` (`category_code`),
-  ADD UNIQUE KEY `category_desc` (`category_desc`);
-
---
--- Indices de la tabla `auth_sessions`
---
-ALTER TABLE `auth_sessions`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `categorias`
@@ -461,29 +273,16 @@ ALTER TABLE `categoria_subcategoria`
   ADD KEY `Índice 1` (`id_catsub`);
 
 --
--- Indices de la tabla `ci_sessions`
+-- Indices de la tabla `groups`
 --
-ALTER TABLE `ci_sessions`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `ci_sessions_timestamp` (`timestamp`);
+ALTER TABLE `groups`
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `denied_access`
+-- Indices de la tabla `login_attempts`
 --
-ALTER TABLE `denied_access`
-  ADD PRIMARY KEY (`ai`);
-
---
--- Indices de la tabla `ips_on_hold`
---
-ALTER TABLE `ips_on_hold`
-  ADD PRIMARY KEY (`ai`);
-
---
--- Indices de la tabla `login_errors`
---
-ALTER TABLE `login_errors`
-  ADD PRIMARY KEY (`ai`);
+ALTER TABLE `login_attempts`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `productos`
@@ -500,51 +299,6 @@ ALTER TABLE `product_cat`
   ADD KEY `FK_product_cat_productos` (`id_product`);
 
 --
--- Indices de la tabla `shop.auth_sessions`
---
-ALTER TABLE `shop.auth_sessions`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `shop.ci_sessions`
---
-ALTER TABLE `shop.ci_sessions`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `ci_sessions_timestamp` (`timestamp`);
-
---
--- Indices de la tabla `shop.denied_access`
---
-ALTER TABLE `shop.denied_access`
-  ADD PRIMARY KEY (`ai`);
-
---
--- Indices de la tabla `shop.ips_on_hold`
---
-ALTER TABLE `shop.ips_on_hold`
-  ADD PRIMARY KEY (`ai`);
-
---
--- Indices de la tabla `shop.login_errors`
---
-ALTER TABLE `shop.login_errors`
-  ADD PRIMARY KEY (`ai`);
-
---
--- Indices de la tabla `shop.username_or_email_on_hold`
---
-ALTER TABLE `shop.username_or_email_on_hold`
-  ADD PRIMARY KEY (`ai`);
-
---
--- Indices de la tabla `shop.users`
---
-ALTER TABLE `shop.users`
-  ADD PRIMARY KEY (`user_id`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD UNIQUE KEY `username` (`username`);
-
---
 -- Indices de la tabla `subcategoria`
 --
 ALTER TABLE `subcategoria`
@@ -558,40 +312,27 @@ ALTER TABLE `totales_actuales`
   ADD KEY `FK__productos` (`id_producto`);
 
 --
--- Indices de la tabla `username_or_email_on_hold`
---
-ALTER TABLE `username_or_email_on_hold`
-  ADD PRIMARY KEY (`ai`);
-
---
 -- Indices de la tabla `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`user_id`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD UNIQUE KEY `username` (`username`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uc_email` (`email`),
+  ADD UNIQUE KEY `uc_activation_selector` (`activation_selector`),
+  ADD UNIQUE KEY `uc_forgotten_password_selector` (`forgotten_password_selector`),
+  ADD UNIQUE KEY `uc_remember_selector` (`remember_selector`);
+
+--
+-- Indices de la tabla `users_groups`
+--
+ALTER TABLE `users_groups`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uc_users_groups` (`user_id`,`group_id`),
+  ADD KEY `fk_users_groups_users1_idx` (`user_id`),
+  ADD KEY `fk_users_groups_groups1_idx` (`group_id`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
 --
-
---
--- AUTO_INCREMENT de la tabla `acl`
---
-ALTER TABLE `acl`
-  MODIFY `ai` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `acl_actions`
---
-ALTER TABLE `acl_actions`
-  MODIFY `action_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `acl_categories`
---
-ALTER TABLE `acl_categories`
-  MODIFY `category_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `categorias`
@@ -606,22 +347,16 @@ ALTER TABLE `categoria_subcategoria`
   MODIFY `id_catsub` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT de la tabla `denied_access`
+-- AUTO_INCREMENT de la tabla `groups`
 --
-ALTER TABLE `denied_access`
-  MODIFY `ai` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `groups`
+  MODIFY `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de la tabla `ips_on_hold`
+-- AUTO_INCREMENT de la tabla `login_attempts`
 --
-ALTER TABLE `ips_on_hold`
-  MODIFY `ai` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `login_errors`
---
-ALTER TABLE `login_errors`
-  MODIFY `ai` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `login_attempts`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
@@ -633,31 +368,7 @@ ALTER TABLE `productos`
 -- AUTO_INCREMENT de la tabla `product_cat`
 --
 ALTER TABLE `product_cat`
-  MODIFY `id_prodcat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT de la tabla `shop.denied_access`
---
-ALTER TABLE `shop.denied_access`
-  MODIFY `ai` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `shop.ips_on_hold`
---
-ALTER TABLE `shop.ips_on_hold`
-  MODIFY `ai` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `shop.login_errors`
---
-ALTER TABLE `shop.login_errors`
-  MODIFY `ai` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `shop.username_or_email_on_hold`
---
-ALTER TABLE `shop.username_or_email_on_hold`
-  MODIFY `ai` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_prodcat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `subcategoria`
@@ -672,27 +383,20 @@ ALTER TABLE `totales_actuales`
   MODIFY `id_totales` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT de la tabla `username_or_email_on_hold`
+-- AUTO_INCREMENT de la tabla `users`
 --
-ALTER TABLE `username_or_email_on_hold`
-  MODIFY `ai` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `users`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `users_groups`
+--
+ALTER TABLE `users_groups`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas
 --
-
---
--- Filtros para la tabla `acl`
---
-ALTER TABLE `acl`
-  ADD CONSTRAINT `acl_ibfk_1` FOREIGN KEY (`action_id`) REFERENCES `acl_actions` (`action_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `acl_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
-
---
--- Filtros para la tabla `acl_actions`
---
-ALTER TABLE `acl_actions`
-  ADD CONSTRAINT `acl_actions_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `acl_categories` (`category_id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `product_cat`
@@ -706,3 +410,10 @@ ALTER TABLE `product_cat`
 --
 ALTER TABLE `totales_actuales`
   ADD CONSTRAINT `FK__productos` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id_producto`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `users_groups`
+--
+ALTER TABLE `users_groups`
+  ADD CONSTRAINT `fk_users_groups_groups1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_users_groups_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
