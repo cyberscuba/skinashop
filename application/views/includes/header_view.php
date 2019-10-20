@@ -24,16 +24,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Inicio <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="<?php echo base_url();?>index.php/Total_products_controller">Inicio</a> 
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="about">Productos</a>
-          </li>
-          <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url();?>index.php/CrudController/create">Categorias</a> 
+            <a class="nav-link" href="<?php echo base_url();?>index.php/Categories_controller">Categorias</a> 
           </li>
 		      <li class="nav-item">
-            <a class="nav-link" href="contact">Contacto</a>
+          <a class="nav-link" href="<?php echo base_url();?>index.php/Subcategories_controller">Sub Categorias</a> 
+          </li>
+          <li class="nav-item">
+          <a class="nav-link" href="<?php echo base_url();?>index.php/Products_controller">Productos</a> 
+          </li>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link" href="<?php echo base_url();?>index.php/Products_category_controller">Productos por categoria</a> 
           </li>
          </ul>
         
