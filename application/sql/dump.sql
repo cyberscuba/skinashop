@@ -1,183 +1,708 @@
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Versión del servidor:         10.1.25-MariaDB - mariadb.org binary distribution
--- SO del servidor:              Win32
--- HeidiSQL Versión:             10.2.0.5599
--- --------------------------------------------------------
+-- phpMyAdmin SQL Dump
+-- version 4.9.0.1
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: localhost:8889
+-- Tiempo de generación: 20-10-2019 a las 20:49:40
+-- Versión del servidor: 5.7.26
+-- Versión de PHP: 7.2.20
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
 
-
--- Volcando estructura de base de datos para shop
-CREATE DATABASE IF NOT EXISTS `shop` /*!40100 DEFAULT CHARACTER SET latin1 */;
+--
+-- Base de datos: `shop`
+--
+CREATE DATABASE IF NOT EXISTS `shop` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `shop`;
 
--- Volcando estructura para tabla shop.categorias
-CREATE TABLE IF NOT EXISTS `categorias` (
-  `id_categoria` int(11) NOT NULL AUTO_INCREMENT,
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `acl`
+--
+
+CREATE TABLE `acl` (
+  `ai` int(10) UNSIGNED NOT NULL,
+  `action_id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `acl_actions`
+--
+
+CREATE TABLE `acl_actions` (
+  `action_id` int(10) UNSIGNED NOT NULL,
+  `action_code` varchar(100) NOT NULL COMMENT 'No periods allowed!',
+  `action_desc` varchar(100) NOT NULL COMMENT 'Human readable description',
+  `category_id` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `acl_categories`
+--
+
+CREATE TABLE `acl_categories` (
+  `category_id` int(10) UNSIGNED NOT NULL,
+  `category_code` varchar(100) NOT NULL COMMENT 'No periods allowed!',
+  `category_desc` varchar(100) NOT NULL COMMENT 'Human readable description'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `auth_sessions`
+--
+
+CREATE TABLE `auth_sessions` (
+  `id` varchar(128) NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `login_time` datetime DEFAULT NULL,
+  `modified_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `ip_address` varchar(45) NOT NULL,
+  `user_agent` varchar(60) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `categorias`
+--
+
+CREATE TABLE `categorias` (
+  `id_categoria` int(11) NOT NULL,
   `nombre_categoria` varchar(100) DEFAULT NULL,
-  `es_activa` int(11) DEFAULT NULL,
-  KEY `Índice 1` (`id_categoria`)
+  `es_activa` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Categorias de los productos almacenados';
 
--- Volcando datos para la tabla shop.categorias: ~0 rows (aproximadamente)
-/*!40000 ALTER TABLE `categorias` DISABLE KEYS */;
-/*!40000 ALTER TABLE `categorias` ENABLE KEYS */;
+--
+-- Volcado de datos para la tabla `categorias`
+--
 
--- Volcando estructura para tabla shop.categoria_subcategoria
-CREATE TABLE IF NOT EXISTS `categoria_subcategoria` (
-  `id_catsub` int(11) NOT NULL AUTO_INCREMENT,
+INSERT INTO `categorias` VALUES
+(1, NULL, NULL),
+(3, '11111', 1),
+(4, 'ssdfsdf', 1),
+(5, 'SELECCION 512', 1),
+(6, 'sfsdfsfd', NULL),
+(7, 'CAMBIADO 2', 1),
+(9, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `categoria_subcategoria`
+--
+
+CREATE TABLE `categoria_subcategoria` (
+  `id_catsub` int(11) NOT NULL,
   `id_categoria` int(11) DEFAULT NULL,
   `id_sub_categoria` int(11) DEFAULT NULL,
   `descripcion` varchar(100) DEFAULT NULL,
-  `es_activa` int(11) DEFAULT '0',
-  KEY `Índice 1` (`id_catsub`)
+  `es_activa` int(11) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Tabla para unir las categorias a las subcategorias.';
 
--- Volcando datos para la tabla shop.categoria_subcategoria: ~0 rows (aproximadamente)
-/*!40000 ALTER TABLE `categoria_subcategoria` DISABLE KEYS */;
-/*!40000 ALTER TABLE `categoria_subcategoria` ENABLE KEYS */;
+--
+-- Volcado de datos para la tabla `categoria_subcategoria`
+--
 
--- Volcando estructura para tabla shop.groups
-CREATE TABLE IF NOT EXISTS `groups` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) NOT NULL,
-  `description` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+INSERT INTO `categoria_subcategoria` VALUES
+(1, 7, NULL, 'PRUEBA INSERCION', NULL),
+(3, 7, 5, 'NUEVA DESCRIPCION', NULL),
+(4, 7, 5, 'NUEVO COMBO', NULL),
+(5, 3, 3, 'TEST', NULL),
+(6, 5, 5, 'CAMBIAME NUEVAMENTE', 1),
+(7, 4, 5, 'NUEVA CREADA', 0),
+(8, 3, 3, 'NUEVA DOS VECES INACTIva', 1),
+(9, 7, 5, NULL, NULL);
 
--- Volcando datos para la tabla shop.groups: ~2 rows (aproximadamente)
-/*!40000 ALTER TABLE `groups` DISABLE KEYS */;
-INSERT INTO `groups` (`id`, `name`, `description`) VALUES
-	(1, 'admin', 'Administrator'),
-	(2, 'members', 'General User');
-/*!40000 ALTER TABLE `groups` ENABLE KEYS */;
+-- --------------------------------------------------------
 
--- Volcando estructura para tabla shop.login_attempts
-CREATE TABLE IF NOT EXISTS `login_attempts` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+--
+-- Estructura de tabla para la tabla `ci_sessions`
+--
+
+CREATE TABLE `ci_sessions` (
+  `id` varchar(128) NOT NULL,
   `ip_address` varchar(45) NOT NULL,
-  `login` varchar(100) NOT NULL,
-  `time` int(11) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `timestamp` int(10) UNSIGNED NOT NULL DEFAULT '0',
+  `data` blob NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla shop.login_attempts: ~0 rows (aproximadamente)
-/*!40000 ALTER TABLE `login_attempts` DISABLE KEYS */;
-/*!40000 ALTER TABLE `login_attempts` ENABLE KEYS */;
+-- --------------------------------------------------------
 
--- Volcando estructura para tabla shop.productos
-CREATE TABLE IF NOT EXISTS `productos` (
-  `id_producto` int(11) NOT NULL AUTO_INCREMENT,
+--
+-- Estructura de tabla para la tabla `denied_access`
+--
+
+CREATE TABLE `denied_access` (
+  `ai` int(10) UNSIGNED NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `time` datetime NOT NULL,
+  `reason_code` tinyint(1) UNSIGNED DEFAULT '0'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ips_on_hold`
+--
+
+CREATE TABLE `ips_on_hold` (
+  `ai` int(10) UNSIGNED NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `time` datetime NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `login_errors`
+--
+
+CREATE TABLE `login_errors` (
+  `ai` int(10) UNSIGNED NOT NULL,
+  `username_or_email` varchar(255) NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `time` datetime NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `productos`
+--
+
+CREATE TABLE `productos` (
+  `id_producto` int(11) NOT NULL,
   `nombre_producto` varchar(100) DEFAULT NULL,
   `descripcion_producto` varchar(100) DEFAULT NULL,
-  `es_activo` int(11) DEFAULT NULL,
-  KEY `id` (`id_producto`)
+  `es_activo` int(11) DEFAULT '0',
+  `valor_producto` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Tabla para almacenar productos';
 
--- Volcando datos para la tabla shop.productos: ~0 rows (aproximadamente)
-/*!40000 ALTER TABLE `productos` DISABLE KEYS */;
-/*!40000 ALTER TABLE `productos` ENABLE KEYS */;
+--
+-- Volcado de datos para la tabla `productos`
+--
 
--- Volcando estructura para tabla shop.product_cat
-CREATE TABLE IF NOT EXISTS `product_cat` (
-  `id_prodcat` int(11) NOT NULL AUTO_INCREMENT,
-  `id_catsub` int(11) DEFAULT NULL,
+INSERT INTO `productos` VALUES
+(2, 'PROD', 'DES', 1, 100000),
+(3, 'PRODUCTOTRES', 'DESCRIPCION', 1, 20000),
+(4, 'PRODUCTO CUATRO', 'DESCRIPCION CUATRO', 1, 15900);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `product_cat`
+--
+
+CREATE TABLE `product_cat` (
+  `id_prodcat` int(11) NOT NULL,
+  `id_categoria` int(11) NOT NULL,
   `id_product` int(11) DEFAULT NULL,
-  `es_activo` int(11) DEFAULT NULL,
-  KEY `id_product` (`id_prodcat`),
-  KEY `FK_product_cat_categoria_subcategoria` (`id_catsub`),
-  KEY `FK_product_cat_productos` (`id_product`),
-  CONSTRAINT `FK_product_cat_categoria_subcategoria` FOREIGN KEY (`id_catsub`) REFERENCES `categoria_subcategoria` (`id_catsub`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_product_cat_productos` FOREIGN KEY (`id_product`) REFERENCES `productos` (`id_producto`) ON DELETE CASCADE ON UPDATE CASCADE
+  `es_activo` int(11) DEFAULT '0',
+  `id_subcategoria` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Union categorias productos';
 
--- Volcando datos para la tabla shop.product_cat: ~0 rows (aproximadamente)
-/*!40000 ALTER TABLE `product_cat` DISABLE KEYS */;
-/*!40000 ALTER TABLE `product_cat` ENABLE KEYS */;
+--
+-- Volcado de datos para la tabla `product_cat`
+--
 
--- Volcando estructura para tabla shop.subcategoria
-CREATE TABLE IF NOT EXISTS `subcategoria` (
-  `id_categoria` int(11) NOT NULL AUTO_INCREMENT,
-  `nombre_categoria` varchar(100) DEFAULT NULL,
-  `es_activa` int(11) DEFAULT NULL,
-  KEY `Índice 1` (`id_categoria`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT COMMENT='Categorias de los productos almacenados';
+INSERT INTO `product_cat` VALUES
+(2, 5, 4, 0, 5),
+(3, 3, 4, 1, 0),
+(5, 7, 3, 1, 0),
+(6, 5, 4, 1, 0),
+(7, 5, 3, 1, 5);
 
--- Volcando datos para la tabla shop.subcategoria: ~0 rows (aproximadamente)
-/*!40000 ALTER TABLE `subcategoria` DISABLE KEYS */;
-/*!40000 ALTER TABLE `subcategoria` ENABLE KEYS */;
+-- --------------------------------------------------------
 
--- Volcando estructura para tabla shop.totales_actuales
-CREATE TABLE IF NOT EXISTS `totales_actuales` (
+--
+-- Estructura de tabla para la tabla `shop.auth_sessions`
+--
+
+CREATE TABLE `shop.auth_sessions` (
+  `id` varchar(128) NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `login_time` datetime DEFAULT NULL,
+  `modified_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `ip_address` varchar(45) NOT NULL,
+  `user_agent` varchar(60) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `shop.ci_sessions`
+--
+
+CREATE TABLE `shop.ci_sessions` (
+  `id` varchar(128) NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `timestamp` int(10) UNSIGNED NOT NULL DEFAULT '0',
+  `data` blob NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `shop.denied_access`
+--
+
+CREATE TABLE `shop.denied_access` (
+  `ai` int(10) UNSIGNED NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `time` datetime NOT NULL,
+  `reason_code` tinyint(1) UNSIGNED DEFAULT '0'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `shop.ips_on_hold`
+--
+
+CREATE TABLE `shop.ips_on_hold` (
+  `ai` int(10) UNSIGNED NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `time` datetime NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `shop.login_errors`
+--
+
+CREATE TABLE `shop.login_errors` (
+  `ai` int(10) UNSIGNED NOT NULL,
+  `username_or_email` varchar(255) NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `time` datetime NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `shop.username_or_email_on_hold`
+--
+
+CREATE TABLE `shop.username_or_email_on_hold` (
+  `ai` int(10) UNSIGNED NOT NULL,
+  `username_or_email` varchar(255) NOT NULL,
+  `time` datetime NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `shop.users`
+--
+
+CREATE TABLE `shop.users` (
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `username` varchar(12) DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  `auth_level` tinyint(3) UNSIGNED NOT NULL,
+  `banned` enum('0','1') NOT NULL DEFAULT '0',
+  `passwd` varchar(60) NOT NULL,
+  `passwd_recovery_code` varchar(60) DEFAULT NULL,
+  `passwd_recovery_date` datetime DEFAULT NULL,
+  `passwd_modified_at` datetime DEFAULT NULL,
+  `last_login` datetime DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `modified_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `subcategoria`
+--
+
+CREATE TABLE `subcategoria` (
+  `id_subcategoria` int(11) NOT NULL,
+  `nombre_subcategoria` varchar(100) DEFAULT NULL,
+  `es_activa` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Categorias de los productos almacenados' ROW_FORMAT=COMPACT;
+
+--
+-- Volcado de datos para la tabla `subcategoria`
+--
+
+INSERT INTO `subcategoria` VALUES
+(3, 'CUATROCIENTOS DOCE', 1),
+(5, 'UNO DOS', 1),
+(6, NULL, 0),
+(7, NULL, 0),
+(8, NULL, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `totales_actuales`
+--
+
+CREATE TABLE `totales_actuales` (
   `id_producto` int(11) DEFAULT NULL,
   `cantidad_producto` int(11) DEFAULT NULL,
-  KEY `FK__productos` (`id_producto`),
-  CONSTRAINT `FK__productos` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id_producto`) ON DELETE CASCADE ON UPDATE CASCADE
+  `id_totales` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Total de productos.';
 
--- Volcando datos para la tabla shop.totales_actuales: ~0 rows (aproximadamente)
-/*!40000 ALTER TABLE `totales_actuales` DISABLE KEYS */;
-/*!40000 ALTER TABLE `totales_actuales` ENABLE KEYS */;
+--
+-- Volcado de datos para la tabla `totales_actuales`
+--
 
--- Volcando estructura para tabla shop.users
-CREATE TABLE IF NOT EXISTS `users` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `ip_address` varchar(45) NOT NULL,
-  `username` varchar(100) DEFAULT NULL,
-  `password` varchar(255) NOT NULL,
-  `email` varchar(254) NOT NULL,
-  `activation_selector` varchar(255) DEFAULT NULL,
-  `activation_code` varchar(255) DEFAULT NULL,
-  `forgotten_password_selector` varchar(255) DEFAULT NULL,
-  `forgotten_password_code` varchar(255) DEFAULT NULL,
-  `forgotten_password_time` int(11) unsigned DEFAULT NULL,
-  `remember_selector` varchar(255) DEFAULT NULL,
-  `remember_code` varchar(255) DEFAULT NULL,
-  `created_on` int(11) unsigned NOT NULL,
-  `last_login` int(11) unsigned DEFAULT NULL,
-  `active` tinyint(1) unsigned DEFAULT NULL,
-  `first_name` varchar(50) DEFAULT NULL,
-  `last_name` varchar(50) DEFAULT NULL,
-  `company` varchar(100) DEFAULT NULL,
-  `phone` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uc_email` (`email`),
-  UNIQUE KEY `uc_activation_selector` (`activation_selector`),
-  UNIQUE KEY `uc_forgotten_password_selector` (`forgotten_password_selector`),
-  UNIQUE KEY `uc_remember_selector` (`remember_selector`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+INSERT INTO `totales_actuales` VALUES
+(4, 9999, 5),
+(3, 100999, 6);
 
--- Volcando datos para la tabla shop.users: ~1 rows (aproximadamente)
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `email`, `activation_selector`, `activation_code`, `forgotten_password_selector`, `forgotten_password_code`, `forgotten_password_time`, `remember_selector`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
-	(1, '127.0.0.1', 'administrator', '$2y$08$200Z6ZZbp3RAEXoaWcMA6uJOFicwNZaqk4oDhqTUiFXFe63MG.Daa', 'admin@admin.com', NULL, '', NULL, NULL, NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0');
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+-- --------------------------------------------------------
 
--- Volcando estructura para tabla shop.users_groups
-CREATE TABLE IF NOT EXISTS `users_groups` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) unsigned NOT NULL,
-  `group_id` mediumint(8) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uc_users_groups` (`user_id`,`group_id`),
-  KEY `fk_users_groups_users1_idx` (`user_id`),
-  KEY `fk_users_groups_groups1_idx` (`group_id`),
-  CONSTRAINT `fk_users_groups_groups1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  CONSTRAINT `fk_users_groups_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+--
+-- Estructura de tabla para la tabla `username_or_email_on_hold`
+--
 
--- Volcando datos para la tabla shop.users_groups: ~2 rows (aproximadamente)
-/*!40000 ALTER TABLE `users_groups` DISABLE KEYS */;
-INSERT INTO `users_groups` (`id`, `user_id`, `group_id`) VALUES
-	(1, 1, 1),
-	(2, 1, 2);
-/*!40000 ALTER TABLE `users_groups` ENABLE KEYS */;
+CREATE TABLE `username_or_email_on_hold` (
+  `ai` int(10) UNSIGNED NOT NULL,
+  `username_or_email` varchar(255) NOT NULL,
+  `time` datetime NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `users`
+--
+
+CREATE TABLE `users` (
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `username` varchar(12) DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  `auth_level` tinyint(3) UNSIGNED NOT NULL,
+  `banned` enum('0','1') NOT NULL DEFAULT '0',
+  `passwd` varchar(60) NOT NULL,
+  `passwd_recovery_code` varchar(60) DEFAULT NULL,
+  `passwd_recovery_date` datetime DEFAULT NULL,
+  `passwd_modified_at` datetime DEFAULT NULL,
+  `last_login` datetime DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `modified_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `users`
+--
+
+INSERT INTO `users` VALUES
+(919936666, 'carlos', 'charlysumo@gmail.com', 1, '0', '$2y$11$Qima3q/5dVET5AxeCvUTUevoM9xsvM9VtC8eWNdlWu98WdcZLX1KW', NULL, NULL, NULL, NULL, '2019-10-20 20:28:04', '2019-10-20 20:28:04'),
+(3957971252, 'skunkbot', 'skunkbot@example.com', 1, '0', '$2y$11$E1EaPqeEI8qiFl6YlPwG5uldkMEaXiIJQCmEgJjPFswGtoa0pzpsa', NULL, NULL, NULL, NULL, '2019-10-20 20:19:04', '2019-10-20 20:19:04');
+
+--
+-- Disparadores `users`
+--
+DELIMITER $$
+CREATE TRIGGER `ca_passwd_trigger` BEFORE UPDATE ON `users` FOR EACH ROW BEGIN
+    IF ((NEW.passwd <=> OLD.passwd) = 0) THEN
+        SET NEW.passwd_modified_at = NOW();
+    END IF;
+END
+$$
+DELIMITER ;
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `acl`
+--
+ALTER TABLE `acl`
+  ADD PRIMARY KEY (`ai`),
+  ADD KEY `action_id` (`action_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indices de la tabla `acl_actions`
+--
+ALTER TABLE `acl_actions`
+  ADD PRIMARY KEY (`action_id`),
+  ADD KEY `category_id` (`category_id`);
+
+--
+-- Indices de la tabla `acl_categories`
+--
+ALTER TABLE `acl_categories`
+  ADD PRIMARY KEY (`category_id`),
+  ADD UNIQUE KEY `category_code` (`category_code`),
+  ADD UNIQUE KEY `category_desc` (`category_desc`);
+
+--
+-- Indices de la tabla `auth_sessions`
+--
+ALTER TABLE `auth_sessions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `categorias`
+--
+ALTER TABLE `categorias`
+  ADD KEY `Índice 1` (`id_categoria`);
+
+--
+-- Indices de la tabla `categoria_subcategoria`
+--
+ALTER TABLE `categoria_subcategoria`
+  ADD KEY `Índice 1` (`id_catsub`);
+
+--
+-- Indices de la tabla `ci_sessions`
+--
+ALTER TABLE `ci_sessions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `ci_sessions_timestamp` (`timestamp`);
+
+--
+-- Indices de la tabla `denied_access`
+--
+ALTER TABLE `denied_access`
+  ADD PRIMARY KEY (`ai`);
+
+--
+-- Indices de la tabla `ips_on_hold`
+--
+ALTER TABLE `ips_on_hold`
+  ADD PRIMARY KEY (`ai`);
+
+--
+-- Indices de la tabla `login_errors`
+--
+ALTER TABLE `login_errors`
+  ADD PRIMARY KEY (`ai`);
+
+--
+-- Indices de la tabla `productos`
+--
+ALTER TABLE `productos`
+  ADD KEY `id` (`id_producto`);
+
+--
+-- Indices de la tabla `product_cat`
+--
+ALTER TABLE `product_cat`
+  ADD KEY `id_product` (`id_prodcat`),
+  ADD KEY `FK_product_cat_categoria_subcategoria` (`id_categoria`),
+  ADD KEY `FK_product_cat_productos` (`id_product`);
+
+--
+-- Indices de la tabla `shop.auth_sessions`
+--
+ALTER TABLE `shop.auth_sessions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `shop.ci_sessions`
+--
+ALTER TABLE `shop.ci_sessions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `ci_sessions_timestamp` (`timestamp`);
+
+--
+-- Indices de la tabla `shop.denied_access`
+--
+ALTER TABLE `shop.denied_access`
+  ADD PRIMARY KEY (`ai`);
+
+--
+-- Indices de la tabla `shop.ips_on_hold`
+--
+ALTER TABLE `shop.ips_on_hold`
+  ADD PRIMARY KEY (`ai`);
+
+--
+-- Indices de la tabla `shop.login_errors`
+--
+ALTER TABLE `shop.login_errors`
+  ADD PRIMARY KEY (`ai`);
+
+--
+-- Indices de la tabla `shop.username_or_email_on_hold`
+--
+ALTER TABLE `shop.username_or_email_on_hold`
+  ADD PRIMARY KEY (`ai`);
+
+--
+-- Indices de la tabla `shop.users`
+--
+ALTER TABLE `shop.users`
+  ADD PRIMARY KEY (`user_id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `username` (`username`);
+
+--
+-- Indices de la tabla `subcategoria`
+--
+ALTER TABLE `subcategoria`
+  ADD KEY `Índice 1` (`id_subcategoria`);
+
+--
+-- Indices de la tabla `totales_actuales`
+--
+ALTER TABLE `totales_actuales`
+  ADD PRIMARY KEY (`id_totales`),
+  ADD KEY `FK__productos` (`id_producto`);
+
+--
+-- Indices de la tabla `username_or_email_on_hold`
+--
+ALTER TABLE `username_or_email_on_hold`
+  ADD PRIMARY KEY (`ai`);
+
+--
+-- Indices de la tabla `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`user_id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `username` (`username`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `acl`
+--
+ALTER TABLE `acl`
+  MODIFY `ai` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `acl_actions`
+--
+ALTER TABLE `acl_actions`
+  MODIFY `action_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `acl_categories`
+--
+ALTER TABLE `acl_categories`
+  MODIFY `category_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `categorias`
+--
+ALTER TABLE `categorias`
+  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT de la tabla `categoria_subcategoria`
+--
+ALTER TABLE `categoria_subcategoria`
+  MODIFY `id_catsub` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT de la tabla `denied_access`
+--
+ALTER TABLE `denied_access`
+  MODIFY `ai` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `ips_on_hold`
+--
+ALTER TABLE `ips_on_hold`
+  MODIFY `ai` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `login_errors`
+--
+ALTER TABLE `login_errors`
+  MODIFY `ai` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `productos`
+--
+ALTER TABLE `productos`
+  MODIFY `id_producto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `product_cat`
+--
+ALTER TABLE `product_cat`
+  MODIFY `id_prodcat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT de la tabla `shop.denied_access`
+--
+ALTER TABLE `shop.denied_access`
+  MODIFY `ai` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `shop.ips_on_hold`
+--
+ALTER TABLE `shop.ips_on_hold`
+  MODIFY `ai` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `shop.login_errors`
+--
+ALTER TABLE `shop.login_errors`
+  MODIFY `ai` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `shop.username_or_email_on_hold`
+--
+ALTER TABLE `shop.username_or_email_on_hold`
+  MODIFY `ai` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `subcategoria`
+--
+ALTER TABLE `subcategoria`
+  MODIFY `id_subcategoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT de la tabla `totales_actuales`
+--
+ALTER TABLE `totales_actuales`
+  MODIFY `id_totales` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT de la tabla `username_or_email_on_hold`
+--
+ALTER TABLE `username_or_email_on_hold`
+  MODIFY `ai` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `acl`
+--
+ALTER TABLE `acl`
+  ADD CONSTRAINT `acl_ibfk_1` FOREIGN KEY (`action_id`) REFERENCES `acl_actions` (`action_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `acl_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `acl_actions`
+--
+ALTER TABLE `acl_actions`
+  ADD CONSTRAINT `acl_actions_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `acl_categories` (`category_id`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `product_cat`
+--
+ALTER TABLE `product_cat`
+  ADD CONSTRAINT `FK_product_cat_categoria_subcategoria` FOREIGN KEY (`id_categoria`) REFERENCES `categoria_subcategoria` (`id_catsub`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_product_cat_productos` FOREIGN KEY (`id_product`) REFERENCES `productos` (`id_producto`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `totales_actuales`
+--
+ALTER TABLE `totales_actuales`
+  ADD CONSTRAINT `FK__productos` FOREIGN KEY (`id_producto`) REFERENCES `productos` (`id_producto`) ON DELETE CASCADE ON UPDATE CASCADE;
