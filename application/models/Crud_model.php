@@ -47,7 +47,12 @@ class Crud_model extends CI_Model {
 /*Metodos para las subcategorias*/
     function sub_categories_show()
     {
-        $query = $this->db->query('SELECT id_subcategoria, nombre_subcategoria, es_activa FROM subcategoria');
+        $query = $this->db->query('SELECT id_subcategoria, nombre_subcategoria, 
+        CASE
+        WHEN es_activa = 0 THEN "INACTIVA"
+        WHEN es_activa = 1 THEN "ACTIVA"
+        ELSE "NO TIENE ESTADO"
+        END AS es_activa FROM subcategoria');
         return $query->result();
     }
     function sub_categories_unico_registro($id_sub_categoria) {
@@ -69,17 +74,22 @@ class Crud_model extends CI_Model {
             'es_activa' => $this->input->post('es_activa')
         );
         $this->db->where('id_subcategoria', $id_subcategoria);
-        $this->db->update('subcategoria',$id_subcategoria);
+        $this->db->update('subcategoria',$data);
     }
     function sub_categories_delete($id_subcategoria)
     {
         $this->db->where('id_subcategoria', $id_subcategoria);
-        $this->db->delete('subcategorias');
+        $this->db->delete('subcategoria');
     }
     /* Metodos para los productos.*/
     function products_show()
     {
-        $query = $this->db->query('SELECT id_producto, nombre_producto, descripcion_producto, es_activo FROM productos');
+        $query = $this->db->query('SELECT id_producto, nombre_producto, descripcion_producto, 
+        CASE
+        WHEN es_activo = 0 THEN "INACTIVO"
+        WHEN es_activo = 1 THEN "ACTIVO"
+        ELSE "NO TIENE ESTADO"
+        END AS es_activo FROM productos');
         return $query->result();
     }
     function products_unico_registro($id_producto) {
@@ -114,7 +124,21 @@ class Crud_model extends CI_Model {
 /** Metodo para las categorias unidas a las subcategorias.*/
     function category_sub_category_show()
     {
-        $query = $this->db->query('SELECT id_catsub, id_categoria, id_sub_categoria, descripcion, es_activa FROM categoria_subcategoria');
+        $query = $this->db->query('SELECT
+        catsub.id_catsub as id_catsub,
+        cat.nombre_categoria as id_categoria,
+        sub.nombre_subcategoria as id_sub_categoria,
+        catsub.descripcion as descripcion,
+        CASE
+        WHEN catsub.es_activa = 0 THEN "INACTIVA"
+        WHEN catsub.es_activa = 1 THEN "ACTIVA"
+        ELSE "NO TIENE ESTADO"
+        END AS es_activa
+        FROM
+        categoria_subcategoria AS catsub
+        INNER JOIN categorias cat ON cat.id_categoria = catsub.id_categoria
+        INNER JOIN subcategoria sub ON sub.id_subcategoria = catsub.id_sub_categoria
+        WHERE catsub.es_activa = 1');
         return $query->result();
     }
     function category_sub_category_unico_registro($id_catsub) {
@@ -131,7 +155,7 @@ class Crud_model extends CI_Model {
         );
         $this->db->insert('categoria_subcategoria',$data);
     }
-    function category_sub_category_update($id_cat_sub)
+    function category_sub_category_update($id_catsub)
     {
         $data = array (
             'id_categoria' => $this->input->post('id_categoria'),
@@ -139,18 +163,50 @@ class Crud_model extends CI_Model {
             'descripcion' => $this->input->post('descripcion'),
             'es_activa' => $this->input->post('es_activa'),
         );
-        $this->db->where('id_cat_sub', $id_catsub);
+        $this->db->where('id_catsub', $id_catsub);
         $this->db->update('categoria_subcategoria',$data);
     }
-    function category_sub_category_delete($id_cat_sub)
+    function category_sub_category_delete($id_catsub)
     {
-        $this->db->where('id_cat_sub', $id_cat_sub);
+        $this->db->where('id_catsub', $id_catsub);
         $this->db->delete('categoria_subcategoria');
     }
+    function get_category_dropdown()
+    {
+         $query = $this->db->query('SELECT id_categoria, nombre_categoria FROM categorias WHERE es_activa = 1');
+        // si hay resultados
+       if ($query->num_rows() > 0) {
+        // almacenamos en una matriz bidimensional
+        foreach($query->result() as $row)
+           $arrDatos[htmlspecialchars($row->id_categoria, ENT_QUOTES)] = htmlspecialchars($row->nombre_categoria, ENT_QUOTES);
+        $query->free_result();
+        return $arrDatos;
+        }
+    }
+    function get_subcategory_dropdown()
+    {
+         $query = $this->db->query('SELECT id_subcategoria, nombre_subcategoria FROM subcategoria  WHERE es_activa = 1');
+        // si hay resultados
+       if ($query->num_rows() > 0) {
+        // almacenamos en una matriz bidimensional
+        foreach($query->result() as $row)
+           $arrDatos[htmlspecialchars($row->id_subcategoria, ENT_QUOTES)] = htmlspecialchars($row->nombre_subcategoria, ENT_QUOTES);
+        $query->free_result();
+        return $arrDatos;
+        }
+    }
+
+
+
     /* Metodos para los productos por categoria.*/
      function products_category_show()
     {
-        $query = $this->db->query('SELECT id_prodcat, id_catsub, id_product, es_activo FROM product_cat');
+        $query = $this->db->query('SELECT id_prodcat, id_catsub, id_product, 
+        CASE
+        WHEN es_activa = 0 THEN "INACTIVA"
+        WHEN es_activa = 1 THEN "ACTIVA"
+        ELSE "NO TIENE ESTADO"
+        END AS es_activo FROM product_cat');
         return $query->result();
     }
     function products_category_unico_registro($id_prod_cat) {
@@ -184,11 +240,16 @@ class Crud_model extends CI_Model {
      /* Metodos para los totales por productos.*/
     function total_products_show()
     {
-        $query = $this->db->query('SELECT id_totales,id_producto, cantidad_producto FROM totales_actuales');
-        return $query->result->result();
+        $query = $this->db->query('SELECT id_totales, nombre_producto AS "id_producto", cantidad_producto FROM totales_actuales, productos where totales_actuales.id_producto = productos.id_producto ');
+        return $query->result();
     }
     function total_products_unico_registro($id_totales) {
-        $query = $this->db->query('SELECT * FROM totales_actuales WHERE `id_totales` =' .$id_totales);
+        $query = $this->db->query('SELECT 
+        DISTINCT
+        id_totales, 
+        (SELECT nombre_producto FROM productos WHERE id_producto = (SELECT id_producto FROM totales_actuales WHERE `id_totales` = '.$id_totales.' ))AS  "id_producto", 
+        cantidad_producto  FROM totales_actuales, productos  WHERE `id_totales` ='.$id_totales
+    );
         return $query->row();
     }
     function total_products_add()
@@ -202,7 +263,7 @@ class Crud_model extends CI_Model {
     function total_products_update($id_totales)
     {
         $data = array (
-            'id_producto' => $this->input->post('id_producto'),
+            //'id_totales' => $this->input->post('id_totales'),
             'cantidad_producto' => $this->input->post('cantidad_producto'),
         );
         $this->db->where('id_totales', $id_totales);
@@ -212,6 +273,18 @@ class Crud_model extends CI_Model {
     {
         $this->db->where('id_totales', $id_totales);
         $this->db->delete('totales_actuales');
+    }
+    function get_productos_dropdown()
+    {
+         $query = $this->db->query('SELECT id_producto, nombre_producto FROM productos WHERE es_activo = 1');
+        // si hay resultados
+       if ($query->num_rows() > 0) {
+        // almacenamos en una matriz bidimensional
+        foreach($query->result() as $row)
+           $arrDatos[htmlspecialchars($row->id_producto, ENT_QUOTES)] = htmlspecialchars($row->nombre_producto, ENT_QUOTES);
+        $query->free_result();
+        return $arrDatos;
+        }
     }
    
 /*

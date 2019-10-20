@@ -9,7 +9,8 @@
             </div>
 
                     <div class="form-group form-check">
-                        <?php $checked = $row->es_activa == '1' ? 'checked' : ''; ?>
+                        <?php $checked = $row->es_activa == '1' ? 'checked' : '0'; ?>
+                        <input type="hidden"   class="form-check-input" name="es_activa" value="0" id="es_activa" />
                         <input type="checkbox" class="form-check-input" name="es_activa" value="1" <?=$checked?> id="es_activa" />
                         <label class="form-check-label" for="es_activa">Categoria activa</label>
                     </div>
