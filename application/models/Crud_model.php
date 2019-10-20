@@ -201,22 +201,34 @@ class Crud_model extends CI_Model {
     /* Metodos para los productos por categoria.*/
      function products_category_show()
     {
-        $query = $this->db->query('SELECT id_prodcat, id_catsub, id_product, 
+        $query = $this->db->query('SELECT 
+        prodcat.id_prodcat AS id_prodcat, 
+        cat.nombre_categoria AS id_categoria, 
+        subcat.nombre_subcategoria AS id_subcategoria, 
+        prod.nombre_producto AS id_product, 
+        prod.valor_producto AS valor_producto,
         CASE
-        WHEN es_activa = 0 THEN "INACTIVA"
-        WHEN es_activa = 1 THEN "ACTIVA"
+        WHEN prod.es_activo = 0 THEN "INACTIVA"
+        WHEN prod.es_activo = 1 THEN "ACTIVA"
         ELSE "NO TIENE ESTADO"
-        END AS es_activo FROM product_cat');
+        END AS es_activo 
+        FROM 
+        shop.product_cat as prodcat
+        JOIN shop.productos prod ON prod.id_producto = prodcat.id_product
+        JOIN shop.categorias cat ON cat.id_categoria = prodcat.id_categoria
+        JOIN shop.subcategoria subcat ON subcat.id_subcategoria = prodcat.id_subcategoria
+        WHERE prodcat.es_activo = 1');
         return $query->result();
     }
-    function products_category_unico_registro($id_prod_cat) {
-        $query = $this->db->query('SELECT * FROM product_cat WHERE `id_prod_cat` =' .$id_prod_cat);
+    function products_category_unico_registro($id_prodcat) {
+        $query = $this->db->query('SELECT * FROM product_cat WHERE `id_prodcat` =' .$id_prodcat);
         return $query->row();
     }
     function products_category_add()
     {
         $data = array (
-            'id_catsub' => $this->input->post('id_catsub'),
+            'id_categoria' => $this->input->post('id_categoria'),
+            'id_subcategoria' => $this->input->post('id_subcategoria'),
             'id_product' => $this->input->post('id_product'),
             'es_activo' => $this->input->post('es_activo'),
         );
@@ -225,18 +237,21 @@ class Crud_model extends CI_Model {
     function products_category_update($id_prodcat)
     {
         $data = array (
-            'id_catsub' => $this->input->post('id_catsub'),
+            'id_categoria' => $this->input->post('id_categoria'),
+            'id_subcategoria' => $this->input->post('id_subcategoria'),
             'id_product' => $this->input->post('id_product'),
             'es_activo' => $this->input->post('es_activo'),
         );
-        $this->db->where('id_prod_cat', $id_prod_cat);
+        $this->db->where('id_prodcat', $id_prodcat);
         $this->db->update('product_cat', $data);
     }
-    function products_category_delete($id_prod_cat)
+    function products_category_delete($id_prodcat)
     {
-        $this->db->where('id_prod_cat', $id_prod_cat);
+        $this->db->where('id_prodcat', $id_prodcat);
         $this->db->delete('product_cat');
     }
+
+    
      /* Metodos para los totales por productos.*/
     function total_products_show()
     {
