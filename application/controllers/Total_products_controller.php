@@ -12,6 +12,7 @@ class Total_products_controller extends CI_Controller {
 
     public function index()
     {
+        
         $this->load->view('/includes/header_view');
         $data['productos'] = $this->Crud_model->get_productos_dropdown();
         $data['result'] = $this->Crud_model->total_products_show();
