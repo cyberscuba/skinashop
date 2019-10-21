@@ -28,6 +28,11 @@
                         <label for="nombre_producto">Nombre producto</label>
                         <input type="text" class="form-control" name="nombre_producto" id="nombre_producto"  placeholder="Nombre producto">
                     </div>
+
+                    <div class="form-group">
+                        <label for="valor_producto">Valor producto</label>
+                        <input type="number" class="form-control" name="valor_producto" id="valor_producto"  placeholder="Valor producto">
+                    </div>
                     <div class="form-group">
                         <label for="descripcion_producto">Descripcion producto</label>
                         <input type="text" class="form-control" name="descripcion_producto" id="descripcion_producto"  placeholder="Descripcion producto">
@@ -57,6 +62,7 @@
                 <tr>
                 <th scope="col">#</th>
                 <th scope="col">Nombre producto</th>
+                <th scope="col">Valor producto</th>
                 <th scope="col">Descripcion producto</th>
                 <th scope="col">Estado producto</th>
                 <th scope="col">Accion</th>
@@ -67,6 +73,7 @@
                 <tr>
                 <th scope="row"><?php echo $row->id_producto;?></th>
                 <td><?php echo $row->nombre_producto;?></td>
+                <td><?php echo $row->valor_producto;?></td>
                 <td><?php echo $row->descripcion_producto;?></td>
                 <td><?php echo $row->es_activo;?></td>
                 <td> 

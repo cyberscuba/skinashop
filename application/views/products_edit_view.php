@@ -8,6 +8,10 @@
                 <input type="text" class="form-control" name="nombre_producto" value="<?php echo $row->nombre_producto; ?>" >
             </div>
             <div class="form-group">
+                <label for="valor_producto">Valor producto</label>
+                <input type="text" class="form-control" name="valor_producto" value="<?php echo $row->valor_producto; ?>" >
+            </div>
+            <div class="form-group">
                 <label for="descripcion_producto">Descripcion producto</label>
                 <input type="text" class="form-control" name="descripcion_producto" value="<?php echo $row->descripcion_producto; ?>" >
             </div>

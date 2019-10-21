@@ -84,7 +84,7 @@ class Crud_model extends CI_Model {
     /* Metodos para los productos.*/
     function products_show()
     {
-        $query = $this->db->query('SELECT id_producto, nombre_producto, descripcion_producto, 
+        $query = $this->db->query('SELECT id_producto, nombre_producto, valor_producto, descripcion_producto, 
         CASE
         WHEN es_activo = 0 THEN "INACTIVO"
         WHEN es_activo = 1 THEN "ACTIVO"
@@ -100,6 +100,7 @@ class Crud_model extends CI_Model {
     {
         $data = array (
             'nombre_producto' => $this->input->post('nombre_producto'),
+            'valor_producto' => $this->input->post('valor_producto'),            
             'descripcion_producto' => $this->input->post('descripcion_producto'),
             'es_activo' => $this->input->post('es_activo')
         );
@@ -110,6 +111,7 @@ class Crud_model extends CI_Model {
         $data = array (
             'nombre_producto' => $this->input->post('nombre_producto'),
             'descripcion_producto' => $this->input->post('descripcion_producto'),
+            'valor_producto' => $this->input->post('valor_producto'),
             'es_activo' => $this->input->post('es_activo')
         );
         $this->db->where('id_producto', $id_producto);
